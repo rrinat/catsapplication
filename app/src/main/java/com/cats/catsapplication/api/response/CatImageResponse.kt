@@ -1,7 +1,3 @@
 package com.cats.catsapplication.api.response
 
-class CatImageResponse {
-
-    var id: String? = null
-    var url: String? = null
-}
+data class CatImageResponse (val id: String? = null, val url: String? = null)

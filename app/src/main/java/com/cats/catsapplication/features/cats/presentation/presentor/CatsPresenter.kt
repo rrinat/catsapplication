@@ -10,11 +10,14 @@ import com.cats.catsapplication.core.utils.loadingView
 import com.cats.catsapplication.features.cats.domain.interactor.CatsInteractor
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.view.CatsView
+import com.cats.catsapplication.features.favorites.data.mapper.toDomain
+import com.cats.catsapplication.features.favorites.domain.interactor.FavoritesInteractor
 import javax.inject.Inject
 
 @InjectViewState
 class CatsPresenter @Inject constructor(
     private val catsInteractor: CatsInteractor,
+    private val favoritesInteractor: FavoritesInteractor,
     private val resourceProvider: ResourceProvider) : Presenter<CatsView>() {
 
     private companion object {
@@ -23,6 +26,7 @@ class CatsPresenter @Inject constructor(
     }
 
     private val catsLoading = loadingView({ }, { viewState.hideSwipeProgress() })
+    private var cats: List<CatModel> = emptyList()
 
     override fun onFirstViewAttach() {
         loadCats()
@@ -32,19 +36,47 @@ class CatsPresenter @Inject constructor(
         loadCats()
     }
 
-    fun onFavoriteClick() {
+    fun onFavoriteMenuClick() {
         viewState.openFavorite()
+    }
+
+    fun onFavoriteClick(catModel: CatModel) {
+        if (catModel.isFavorite()) {
+            deleteFavorite(catModel)
+        } else {
+            addFavorite(catModel)
+        }
     }
 
     private fun loadCats() {
         catsInteractor.getCats(CATS_COUNT)
-            .map { cats -> cats.mapIndexed { index, cat ->  CatModel(cat.id, cat.url, index % 2 == 0) } }
+            .map { cats -> cats.mapIndexed { _, cat ->  CatModel(cat.id, cat.url) } }
             .async()
             .compose(RxDecor.loadingSingle(catsLoading))
             .subscribe(this::onCatsReceived, { viewState.showError(resourceProvider.getString(R.string.cats_message_error)) })
     }
 
     private fun onCatsReceived(cats: List<CatModel>) {
+        this.cats = cats
+        viewState.showCats(cats)
+    }
+
+    private fun addFavorite(catModel: CatModel) {
+        favoritesInteractor.saveFavorite(catModel.toDomain())
+            .async()
+            .compose(lifecycle())
+            .subscribe({ favoriteId -> updateCats(catModel, favoriteId) }, {})
+    }
+
+    private fun deleteFavorite(catModel: CatModel) {
+        favoritesInteractor.deleteFavorite(catModel.favoriteId)
+            .async()
+            .compose(lifecycle<Any>())
+            .subscribe({ updateCats(catModel, "") }, {})
+    }
+
+    private fun updateCats(catModel: CatModel, favoriteId: String) {
+        cats = cats.map { cat -> if (cat.id != catModel.id) cat else cat.copy(favoriteId = favoriteId) }
         viewState.showCats(cats)
     }
 }

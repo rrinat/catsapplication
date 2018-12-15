@@ -36,7 +36,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     @ProvidePresenter
     fun providePresenter() = presenter
 
-    private var catsAdapter = CatsAdapter(arrayListOf())
+    private var catsAdapter = CatsAdapter(emptyList(), this::onFavoriteClick)
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -72,7 +72,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.favorite) {
-            presenter.onFavoriteClick()
+            presenter.onFavoriteMenuClick()
             true
         } else {
             super.onOptionsItemSelected(item)
@@ -93,5 +93,9 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
 
     override fun openFavorite() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun onFavoriteClick(catModel: CatModel) {
+        presenter.onFavoriteClick(catModel)
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.cats.catsapplication.App
 import com.cats.catsapplication.DI.cats.CatsComponent
 import com.cats.catsapplication.DI.cats.CatsModule
+import com.cats.catsapplication.DI.favorites.FavoritesModule
 import com.cats.catsapplication.R
 import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.router.Screens
@@ -25,7 +26,7 @@ class CatsActivity : AppCompatActivity() {
     }
 
     private fun buildComponent(): CatsComponent {
-         return App.getAppComponent().addCatsComponent(CatsModule())
+         return App.getAppComponent().addCatsComponent(CatsModule(), FavoritesModule())
     }
 
     override fun onDestroy() {

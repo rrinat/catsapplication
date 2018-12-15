@@ -54,6 +54,8 @@ class LifecycleTransformer<T : R, R>(private val lifecycle: Observable<Any>) : O
 
 fun <T> Single<T>.async(): Single<T> = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
+fun Completable.async(): Completable = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+
 
 object RxDecor {
 
