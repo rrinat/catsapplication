@@ -1,6 +1,7 @@
 package com.cats.catsapplication.DI.favorites
 
-import com.cats.catsapplication.api.ApiService
+import com.cats.catsapplication.core.data.AppDatabase
+import com.cats.catsapplication.core.data.CatDao
 import com.cats.catsapplication.features.favorites.data.repository.FavoritesRepository
 import com.cats.catsapplication.features.favorites.data.repository.FavoritesRepositoryIml
 import com.cats.catsapplication.features.favorites.domain.interactor.FavoritesInteractor
@@ -12,7 +13,10 @@ import dagger.Provides
 class FavoritesModule {
 
     @Provides
-    internal fun provideFavoritesRepository(apiService: ApiService): FavoritesRepository = FavoritesRepositoryIml(apiService)
+    internal fun provideCatDao(appDatabase: AppDatabase): CatDao = appDatabase.catDao()
+
+    @Provides
+    internal fun provideFavoritesRepository(catDao: CatDao): FavoritesRepository = FavoritesRepositoryIml(catDao)
 
     @Provides
     fun provideFavoritesInteractor(favoritesRepository: FavoritesRepository): FavoritesInteractor = FavoritesInteractorIml(favoritesRepository)

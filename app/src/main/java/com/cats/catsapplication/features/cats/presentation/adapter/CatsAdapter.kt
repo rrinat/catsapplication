@@ -59,7 +59,7 @@ class CatsAdapter(private var cats: List<CatModel>,
         fun updateFavorite(cat: CatModel) {
             val context = imageView.context
 
-            val favoriteColor = if (cat.isFavorite()) {
+            val favoriteColor = if (cat.isFavorite) {
                 ContextCompat.getColor(context, R.color.colorAccent)
             } else {
                 ContextCompat.getColor(context, R.color.colorGrey)

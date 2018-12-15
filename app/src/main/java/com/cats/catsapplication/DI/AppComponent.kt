@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, NetworkModule::class])
+@Component(modules = [AppModule::class, NetworkModule::class, DBModule::class])
 interface AppComponent {
 
     fun addCatsComponent(catsModule: CatsModule, favoritesModule: FavoritesModule): CatsComponent

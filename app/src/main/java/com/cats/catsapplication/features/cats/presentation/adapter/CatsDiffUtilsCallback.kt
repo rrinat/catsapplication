@@ -14,10 +14,10 @@ class CatsDiffUtilsCallback (private val oldItems: List<CatModel>, private val n
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItems[oldItemPosition].favoriteId == newItems[newItemPosition].favoriteId
+        return oldItems[oldItemPosition].isFavorite == newItems[newItemPosition].isFavorite
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return newItems[newItemPosition].favoriteId
+        return newItems[newItemPosition].isFavorite
     }
 }

@@ -33,6 +33,7 @@ class App : Application() {
             .builder()
             .appModule(AppModule(this))
             .networkModule(NetworkModule(BuildConfig.ENDPOINT, BuildConfig.API_KEY))
+            .dBModule(DBModule(this))
             .build()
     }
 }

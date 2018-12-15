@@ -1,17 +1,19 @@
 package com.cats.catsapplication.features.favorites.data.repository
 
-import com.cats.catsapplication.api.ApiService
+import com.cats.catsapplication.core.data.CatDao
 import com.cats.catsapplication.core.domain.Cat
+import com.cats.catsapplication.features.favorites.presentation.mapper.toEntity
 import io.reactivex.Completable
-import io.reactivex.Single
 
-class FavoritesRepositoryIml constructor(private val apiService: ApiService) : FavoritesRepository {
+class FavoritesRepositoryIml constructor(private val catDao: CatDao) : FavoritesRepository {
 
-    override fun saveFavorite(cat: Cat): Single<String> {
-        return Single.just("1")
+    override fun saveFavorite(cat: Cat): Completable {
+        return Completable.fromAction {
+            catDao.insertCats(cat.toEntity())
+        }
     }
 
-    override fun deleteFavorite(favoriteId: String): Completable {
-        return Completable.complete()
+    override fun deleteFavorite(cat: Cat): Completable {
+        return Completable.fromAction { catDao.deleteCats(cat.toEntity()) }
     }
 }

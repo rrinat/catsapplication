@@ -41,7 +41,7 @@ class CatsPresenter @Inject constructor(
     }
 
     fun onFavoriteClick(catModel: CatModel) {
-        if (catModel.isFavorite()) {
+        if (catModel.isFavorite) {
             deleteFavorite(catModel)
         } else {
             addFavorite(catModel)
@@ -64,19 +64,19 @@ class CatsPresenter @Inject constructor(
     private fun addFavorite(catModel: CatModel) {
         favoritesInteractor.saveFavorite(catModel.toDomain())
             .async()
-            .compose(lifecycle())
-            .subscribe({ favoriteId -> updateCats(catModel, favoriteId) }, {})
+            .compose(lifecycle<Any>())
+            .subscribe({ updateCats(catModel, true) }, {})
     }
 
     private fun deleteFavorite(catModel: CatModel) {
-        favoritesInteractor.deleteFavorite(catModel.favoriteId)
+        favoritesInteractor.deleteFavorite(catModel.toDomain())
             .async()
             .compose(lifecycle<Any>())
-            .subscribe({ updateCats(catModel, "") }, {})
+            .subscribe({ updateCats(catModel, false) }, {})
     }
 
-    private fun updateCats(catModel: CatModel, favoriteId: String) {
-        cats = cats.map { cat -> if (cat.id != catModel.id) cat else cat.copy(favoriteId = favoriteId) }
+    private fun updateCats(catModel: CatModel, isFavorite: Boolean) {
+        cats = cats.map { cat -> if (cat.id != catModel.id) cat else cat.copy(isFavorite = isFavorite) }
         viewState.showCats(cats)
     }
 }

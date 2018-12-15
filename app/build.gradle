@@ -64,6 +64,12 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
+    //room
+    def room_version = '1.1.1'
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
+
     //moxy
     def moxy_version = "1.5.5"
     implementation "com.arello-mobile:moxy-app-compat:$moxy_version"
