@@ -1,4 +1,4 @@
-package com.cats.catsapplication.features.cats.DI
+package com.cats.catsapplication.DI.cats
 
 import javax.inject.Scope
 

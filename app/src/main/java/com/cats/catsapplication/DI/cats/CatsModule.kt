@@ -1,4 +1,4 @@
-package com.cats.catsapplication.features.cats.DI
+package com.cats.catsapplication.DI.cats
 
 import com.cats.catsapplication.api.ApiService
 import com.cats.catsapplication.features.cats.data.repository.CatsRepository

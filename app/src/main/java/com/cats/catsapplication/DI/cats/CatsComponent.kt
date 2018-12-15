@@ -1,4 +1,4 @@
-package com.cats.catsapplication.features.cats.DI
+package com.cats.catsapplication.DI.cats
 
 import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter

@@ -8,9 +8,9 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.cats.catsapplication.App
+import com.cats.catsapplication.DI.cats.CatsComponent
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.mvp.BaseFragment
-import com.cats.catsapplication.features.cats.DI.CatsComponent
 import com.cats.catsapplication.features.cats.presentation.adapter.CatsAdapter
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter

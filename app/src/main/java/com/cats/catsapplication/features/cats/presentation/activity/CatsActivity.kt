@@ -3,9 +3,9 @@ package com.cats.catsapplication.features.cats.presentation.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.cats.catsapplication.App
+import com.cats.catsapplication.DI.cats.CatsComponent
+import com.cats.catsapplication.DI.cats.CatsModule
 import com.cats.catsapplication.R
-import com.cats.catsapplication.features.cats.DI.CatsComponent
-import com.cats.catsapplication.features.cats.DI.CatsModule
 import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.router.Screens
 
