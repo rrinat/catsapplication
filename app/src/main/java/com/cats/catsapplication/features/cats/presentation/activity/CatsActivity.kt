@@ -15,6 +15,7 @@ class CatsActivity : AppCompatActivity() {
         App.getComponents().put(Screens.CATS_SCREEN, this::buildComponent)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
+        setTitle("")
 
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (fragment == null) {

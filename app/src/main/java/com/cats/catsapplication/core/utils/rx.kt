@@ -1,5 +1,8 @@
 package com.cats.catsapplication.core.utils
 
+import android.os.Handler
+import android.os.Looper
+import com.cats.catsapplication.core.mvp.LoadingView
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -50,3 +53,28 @@ class LifecycleTransformer<T : R, R>(private val lifecycle: Observable<Any>) : O
 }
 
 fun <T> Single<T>.async(): Single<T> = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+
+
+object RxDecor {
+
+    @JvmStatic
+    fun <T> loadingSingle(view: LoadingView): SingleTransformer<T, T> = LoadingViewTransformer(view)
+
+    private class LoadingViewTransformer<T : R, R>(private val loadingView: LoadingView) : SingleTransformer<T, R> {
+
+        private val handler = Handler(Looper.getMainLooper())
+
+        override fun apply(upstream: Single<T>): SingleSource<R> {
+            return upstream
+                .doOnSubscribe { handler.post { loadingView.showProgress() } }
+                .doAfterTerminate { handler.post { loadingView.hideProgress() } }
+                .doOnDispose { handler.post { loadingView.hideProgress() } }
+                .map { it }
+        }
+    }
+}
+
+fun loadingView(show: (() -> (Unit)), hide: (() -> (Unit))): LoadingView = object : LoadingView {
+    override fun hideProgress() = hide()
+    override fun showProgress() = show()
+}

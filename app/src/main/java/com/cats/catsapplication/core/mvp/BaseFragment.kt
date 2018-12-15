@@ -8,7 +8,6 @@ import com.cats.catsapplication.core.utils.show
 abstract class BaseFragment : MoxyFragment(), Presentable {
 
     protected val progressView: View? = null
-    protected val SCOPE_NAME = this.javaClass.name
 
     override fun showProgress() {
         progressView?.show()
@@ -22,8 +21,8 @@ abstract class BaseFragment : MoxyFragment(), Presentable {
         progressView?.gone()
     }
 
-    override fun onReceiveError(message: String) {
-        showToast(message)
+    override fun showError(error: String) {
+        showToast(error)
     }
 
     protected fun showToast(message: String) {

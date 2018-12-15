@@ -1,6 +1,7 @@
 package com.cats.catsapplication.features.cats.presentation.fragment
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
@@ -21,7 +22,7 @@ import com.cats.catsapplication.router.Screens
 import javax.inject.Inject
 
 
-class CatsFragment : BaseFragment(), CatsView {
+class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListener {
 
     companion object {
 
@@ -40,6 +41,8 @@ class CatsFragment : BaseFragment(), CatsView {
 
     private var catsAdapter = CatsAdapter(arrayListOf())
 
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         App.getComponents().get<CatsComponent>(Screens.CATS_SCREEN).inject(this)
         super.onCreate(savedInstanceState)
@@ -53,10 +56,21 @@ class CatsFragment : BaseFragment(), CatsView {
             adapter = catsAdapter
         }
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener(this)
+
         return view
     }
 
     override fun showCats(cats: List<CatModel>) {
         catsAdapter.updateItems(cats)
+    }
+
+    override fun onRefresh() {
+        presenter.onRefresh()
+    }
+
+    override fun hideSwipeProgress() {
+        swipeRefreshLayout.isRefreshing = false
     }
 }

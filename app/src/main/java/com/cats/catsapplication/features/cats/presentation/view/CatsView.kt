@@ -5,4 +5,5 @@ import com.cats.catsapplication.features.cats.presentation.model.CatModel
 
 interface CatsView : Presentable {
     fun showCats(cats: List<CatModel>)
+    fun hideSwipeProgress()
 }
