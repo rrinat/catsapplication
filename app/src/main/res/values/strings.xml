@@ -2,4 +2,6 @@
     <string name="app_name">CatsApplication</string>
 
     <string name="cats_message_error">Не удалось загрузить картинки. Проверьте интернет соединение.</string>
+    <string name="cats_title"/>
+    <string name="favorites_title">Избранное</string>
 </resources>

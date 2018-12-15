@@ -32,6 +32,10 @@ class CatsPresenter @Inject constructor(
         loadCats()
     }
 
+    fun onFavoriteClick() {
+        viewState.openFavorite()
+    }
+
     private fun loadCats() {
         catsInteractor.getCats(CATS_COUNT)
             .map { cats -> cats.mapIndexed { index, cat ->  CatModel(cat.id, cat.url, index % 2 == 0) } }
