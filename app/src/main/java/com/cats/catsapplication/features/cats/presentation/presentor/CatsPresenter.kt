@@ -2,6 +2,7 @@ package com.cats.catsapplication.features.cats.presentation.presentor
 
 import com.arellomobile.mvp.InjectViewState
 import com.cats.catsapplication.R
+import com.cats.catsapplication.core.domain.Cat
 import com.cats.catsapplication.core.mvp.Presenter
 import com.cats.catsapplication.core.utils.ResourceProvider
 import com.cats.catsapplication.core.utils.RxDecor
@@ -10,9 +11,13 @@ import com.cats.catsapplication.core.utils.loadingView
 import com.cats.catsapplication.features.cats.domain.interactor.CatsInteractor
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.view.CatsView
-import com.cats.catsapplication.features.favorites.data.mapper.toDomain
 import com.cats.catsapplication.features.favorites.domain.interactor.FavoritesInteractor
+import com.cats.catsapplication.features.favorites.presentation.mapper.toDomain
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
+
+typealias Cats = List<Cat>
 
 @InjectViewState
 class CatsPresenter @Inject constructor(
@@ -28,7 +33,9 @@ class CatsPresenter @Inject constructor(
     private val catsLoading = loadingView({ }, { viewState.hideSwipeProgress() })
     private var cats: List<CatModel> = emptyList()
 
-    override fun onFirstViewAttach() {
+    override fun attachView(view: CatsView?) {
+        super.attachView(view)
+
         loadCats()
     }
 
@@ -48,9 +55,9 @@ class CatsPresenter @Inject constructor(
         }
     }
 
+
     private fun loadCats() {
-        catsInteractor.getCats(CATS_COUNT)
-            .map { cats -> cats.mapIndexed { _, cat ->  CatModel(cat.id, cat.url) } }
+        Single.zip<Cats, Cats, List<CatModel>>(catsInteractor.getCats(CATS_COUNT), favoritesInteractor.loadAllFavorites(), BiFunction { t1, t2 -> combineCats(t1, t2) })
             .async()
             .compose(RxDecor.loadingSingle(catsLoading))
             .subscribe(this::onCatsReceived, { viewState.showError(resourceProvider.getString(R.string.cats_message_error)) })
@@ -78,5 +85,9 @@ class CatsPresenter @Inject constructor(
     private fun updateCats(catModel: CatModel, isFavorite: Boolean) {
         cats = cats.map { cat -> if (cat.id != catModel.id) cat else cat.copy(isFavorite = isFavorite) }
         viewState.showCats(cats)
+    }
+
+    private fun combineCats(remoteCats: List<Cat>, favoriteCats: List<Cat>): List<CatModel> {
+        return remoteCats.map { remoteCat -> CatModel(remoteCat.id, remoteCat.url, favoriteCats.any { it.id == remoteCat.id }) }
     }
 }

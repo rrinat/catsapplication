@@ -1,8 +1,8 @@
 package com.cats.catsapplication.features.favorites.presentation.mapper
 
-import com.cats.catsapplication.core.data.enitity.CatEntity
 import com.cats.catsapplication.core.domain.Cat
+import com.cats.catsapplication.features.cats.presentation.model.CatModel
 
-fun Cat.toEntity(): CatEntity {
-    return CatEntity(id, url)
+fun CatModel.toDomain(): Cat {
+    return Cat(id, url)
 }

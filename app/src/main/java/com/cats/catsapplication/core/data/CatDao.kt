@@ -3,7 +3,7 @@ package com.cats.catsapplication.core.data
 import android.arch.persistence.room.*
 import com.cats.catsapplication.core.data.enitity.CatEntity
 import com.cats.catsapplication.core.data.enitity.TABLE_NAME_CAT
-import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface CatDao {
@@ -15,5 +15,5 @@ interface CatDao {
     fun deleteCats(vararg cats: CatEntity)
 
     @Query("SELECT * FROM $TABLE_NAME_CAT")
-    fun loadAllCats(): Flowable<List<CatEntity>>
+    fun loadAllCats(): Single<List<CatEntity>>
 }

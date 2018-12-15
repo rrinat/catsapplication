@@ -8,4 +8,6 @@ class FavoritesInteractorIml (private val favoritesRepository: FavoritesReposito
     override fun saveFavorite(cat: Cat) = favoritesRepository.saveFavorite(cat)
 
     override fun deleteFavorite(cat: Cat) = favoritesRepository.deleteFavorite(cat)
+
+    override fun loadAllFavorites() = favoritesRepository.loadAllFavorites()
 }
