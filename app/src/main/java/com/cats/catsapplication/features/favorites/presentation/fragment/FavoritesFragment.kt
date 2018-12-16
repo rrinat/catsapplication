@@ -1,8 +1,8 @@
 package com.cats.catsapplication.features.favorites.presentation.fragment
 
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +50,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
         val view = inflater.inflate(R.layout.fragment_favorites, container, false)
 
         with(view.findViewById<RecyclerView>(R.id.recycler_view)) {
-            layoutManager = StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = GridLayoutManager(context, SPAN_COUNT)
             adapter = favoritesAdapter
         }
 

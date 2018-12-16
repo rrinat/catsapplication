@@ -2,8 +2,8 @@ package com.cats.catsapplication.features.cats.presentation.fragment
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -50,7 +50,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
         val view = inflater.inflate(R.layout.fragment_cats, container, false)
 
         with(view.findViewById<RecyclerView>(R.id.recycler_view)) {
-            layoutManager = StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = GridLayoutManager(context, SPAN_COUNT)
             adapter = catsAdapter
         }
 
