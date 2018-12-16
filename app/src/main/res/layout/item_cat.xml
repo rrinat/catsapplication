@@ -16,13 +16,13 @@
 
         <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
                 android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                android:background="@color/colorGrey"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 tools:srcCompat="@drawable/ic_launcher_foreground"/>
 
         <android.support.v7.widget.AppCompatImageView

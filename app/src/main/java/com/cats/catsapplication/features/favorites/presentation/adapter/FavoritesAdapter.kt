@@ -45,9 +45,7 @@ class FavoritesAdapter(private var cats: List<Cat>,
         private val downloadView: AppCompatImageView = view.findViewById(R.id.download_button)
 
         fun bind(cat: Cat) {
-            imageView.setImageDrawable(null)
             imageView.loadImage(cat.url)
-
 
             val context = imageView.context
             ImageViewCompat.setImageTintList(favoriteView, ColorStateList.valueOf( ContextCompat.getColor(context, R.color.colorAccent)))

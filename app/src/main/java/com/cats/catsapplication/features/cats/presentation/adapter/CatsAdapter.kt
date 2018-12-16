@@ -54,7 +54,6 @@ class CatsAdapter(private var cats: List<CatModel>,
         private val downloadView: AppCompatImageView = view.findViewById(R.id.download_button)
 
         fun bind(cat: CatModel) {
-            imageView.setImageDrawable(null)
             imageView.loadImage(cat.url)
 
             updateFavorite(cat)
