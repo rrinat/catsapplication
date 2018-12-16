@@ -7,7 +7,7 @@ import com.cats.catsapplication.features.favorites.data.mapper.toEntity
 import io.reactivex.Completable
 import io.reactivex.Single
 
-class FavoritesRepositoryIml constructor(private val catDao: CatDao) : FavoritesRepository {
+class FavoritesRepositoryImpl constructor(private val catDao: CatDao) : FavoritesRepository {
 
     override fun saveFavorite(cat: Cat): Completable {
         return Completable.fromAction {

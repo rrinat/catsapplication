@@ -9,6 +9,9 @@ interface CatsView : Presentable {
     fun showCats(cats: List<CatModel>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
+    fun showSwipeProgress()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun hideSwipeProgress()
 
     @StateStrategyType(OneExecutionStateStrategy::class)

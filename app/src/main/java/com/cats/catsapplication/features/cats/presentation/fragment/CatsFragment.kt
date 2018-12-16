@@ -16,6 +16,7 @@ import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter
 import com.cats.catsapplication.features.cats.presentation.view.CatsView
 import com.cats.catsapplication.router.Screens
+import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
 
 
@@ -36,7 +37,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     @ProvidePresenter
     fun providePresenter() = presenter
 
-    private var catsAdapter = CatsAdapter(emptyList(), this::onFavoriteClick)
+    private var catsAdapter = CatsAdapter(emptyList(), this::onFavoriteClick, this::onDownloadClick)
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -47,7 +48,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_cat_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_cats, container, false)
 
         with(view.findViewById<RecyclerView>(R.id.recycler_view)) {
             layoutManager = StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL)
@@ -79,12 +80,20 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
         }
     }
 
+    override fun getProgressView(): View? {
+        return view?.findViewById(R.id.progress_view)
+    }
+
     override fun showCats(cats: List<CatModel>) {
         catsAdapter.updateItems(cats)
     }
 
     override fun onRefresh() {
         presenter.onRefresh()
+    }
+
+    override fun showSwipeProgress() {
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideSwipeProgress() {
@@ -97,5 +106,9 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
 
     private fun onFavoriteClick(catModel: CatModel) {
         presenter.onFavoriteClick(catModel)
+    }
+
+    private fun onDownloadClick(catModel: CatModel) {
+        presenter.onDownloadClick(catModel, RxPermissions(activity!!))
     }
 }

@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">CatsApplication</string>
 
-    <string name="cats_message_error">Не удалось загрузить картинки. Проверьте интернет соединение.</string>
+    <string name="file_storage_error">Не установлена флеш-память</string>
+    <string name="permissions_message_not_granted">Для сохранения чека необходимо разрешить доступ к хранилищу</string>
+    <string name="intent_view_error">Не найдено приложений поддерживающих функцию просмотра</string>
+
     <string name="cats_title"/>
+    <string name="cats_error_download_images">Не удалось загрузить картинки. Проверьте интернет соединение.</string>
+    <string name="cats_error_download_file">Не удалось загрузкить и сохранить на флеш-память картинку</string>
     <string name="favorites_title">Избранное</string>
+
+
 </resources>

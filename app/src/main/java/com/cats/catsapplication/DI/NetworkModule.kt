@@ -2,6 +2,12 @@ package com.cats.catsapplication.DI
 
 import com.cats.catsapplication.api.ApiKeyInterceptor
 import com.cats.catsapplication.api.ApiService
+import com.cats.catsapplication.core.data.repository.FileRepository
+import com.cats.catsapplication.core.data.repository.FileRepositoryImpl
+import com.cats.catsapplication.core.domain.interactor.FileInteractor
+import com.cats.catsapplication.core.domain.interactor.FileInteractorImpl
+import com.cats.catsapplication.core.utils.FileProvider
+import com.cats.catsapplication.core.utils.ResourceProvider
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -56,4 +62,13 @@ class NetworkModule (private val endpoint: String,
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
+
+    @Provides
+    internal fun provideFileRepository(apiService: ApiService,
+                                       fileProvider: FileProvider,
+                                       resourceProvider: ResourceProvider
+    ): FileRepository = FileRepositoryImpl(apiService, fileProvider, resourceProvider)
+
+    @Provides
+    fun provideFileInteractor(fileRepository: FileRepository): FileInteractor = FileInteractorImpl(fileRepository)
 }

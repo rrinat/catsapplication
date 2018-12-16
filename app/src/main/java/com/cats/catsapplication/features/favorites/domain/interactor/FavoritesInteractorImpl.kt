@@ -3,7 +3,7 @@ package com.cats.catsapplication.features.favorites.domain.interactor
 import com.cats.catsapplication.core.domain.Cat
 import com.cats.catsapplication.features.favorites.data.repository.FavoritesRepository
 
-class FavoritesInteractorIml (private val favoritesRepository: FavoritesRepository): FavoritesInteractor {
+class FavoritesInteractorImpl (private val favoritesRepository: FavoritesRepository): FavoritesInteractor {
 
     override fun saveFavorite(cat: Cat) = favoritesRepository.saveFavorite(cat)
 

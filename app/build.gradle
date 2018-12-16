@@ -21,6 +21,15 @@ android {
         buildConfigField "String", "API_KEY", "\"f9729535-6294-48df-97ab-c9d6b73d01c1\""
     }
 
+    applicationVariants.all { variant ->
+        def mergedFlavor = variant.mergedFlavor
+        def filesAuthorityValue = applicationId + ".files"
+
+        buildConfigField("String", "FILES_AUTHORITY", "\"${filesAuthorityValue}\"")
+
+        mergedFlavor.manifestPlaceholders = [filesAuthority  : filesAuthorityValue]
+    }
+
     buildTypes {
         release {
             kotlin_version
@@ -51,6 +60,7 @@ dependencies {
 
     // rx
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    api "com.github.tbruyelle:rxpermissions:${var}"
 
     //retrofit
     def retrofit_version = "2.4.0"
