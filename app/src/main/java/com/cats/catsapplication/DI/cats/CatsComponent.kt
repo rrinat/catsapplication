@@ -1,5 +1,6 @@
 package com.cats.catsapplication.DI.cats
 
+import com.cats.catsapplication.DI.favorites.FavoritesComponent
 import com.cats.catsapplication.DI.favorites.FavoritesModule
 import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter
@@ -11,4 +12,6 @@ interface CatsComponent {
 
     fun inject(presenter: CatsPresenter)
     fun inject(fragment: CatsFragment)
+
+    fun addFavoritesComponent(): FavoritesComponent
 }

@@ -8,7 +8,8 @@
     <string name="cats_title"/>
     <string name="cats_error_download_images">Не удалось загрузить картинки. Проверьте интернет соединение.</string>
     <string name="cats_error_download_file">Не удалось загрузкить и сохранить на флеш-память картинку</string>
-    <string name="favorites_title">Избранное</string>
 
+    <string name="favorites_title">Избранное</string>
+    <string name="favorites_message_empty">Избранное пока пустое. Нажмите по сердечкам у картинок для добавления в избранное</string>
 
 </resources>

@@ -15,6 +15,7 @@ import com.cats.catsapplication.features.cats.presentation.adapter.CatsAdapter
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter
 import com.cats.catsapplication.features.cats.presentation.view.CatsView
+import com.cats.catsapplication.features.favorites.presentation.activity.FavoritesActivity
 import com.cats.catsapplication.router.Screens
 import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
@@ -101,7 +102,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     }
 
     override fun openFavorite() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        startActivity(FavoritesActivity.makeIntent(context!!))
     }
 
     private fun onFavoriteClick(catModel: CatModel) {
