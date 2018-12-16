@@ -7,8 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.cats.catsapplication.App
-import com.cats.catsapplication.DI.cats.CatsComponent
+import com.cats.catsapplication.DI.cats.CatsComponentProvider
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.mvp.BaseFragment
 import com.cats.catsapplication.features.cats.presentation.adapter.CatsAdapter
@@ -16,7 +15,6 @@ import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter
 import com.cats.catsapplication.features.cats.presentation.view.CatsView
 import com.cats.catsapplication.features.favorites.presentation.activity.FavoritesActivity
-import com.cats.catsapplication.router.Screens
 import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
 
@@ -43,7 +41,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.getComponents().get<CatsComponent>(Screens.CATS_SCREEN).inject(this)
+        CatsComponentProvider.get().inject(this)
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }

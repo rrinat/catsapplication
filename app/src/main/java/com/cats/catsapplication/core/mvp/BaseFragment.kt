@@ -10,7 +10,7 @@ import com.cats.catsapplication.core.utils.show
 
 abstract class BaseFragment : MoxyFragment(), Presentable {
 
-    open protected fun getProgressView(): View? = null
+    protected open fun getProgressView(): View? = null
 
     override fun showProgress() {
         getProgressView()?.show()

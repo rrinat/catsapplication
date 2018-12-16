@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.cats.catsapplication.App
-import com.cats.catsapplication.DI.favorites.FavoritesComponent
+import com.cats.catsapplication.DI.favorites.FavoritesComponentProvider
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.domain.Cat
 import com.cats.catsapplication.core.mvp.BaseFragment
@@ -19,7 +18,6 @@ import com.cats.catsapplication.core.utils.show
 import com.cats.catsapplication.features.favorites.presentation.adapter.FavoritesAdapter
 import com.cats.catsapplication.features.favorites.presentation.presenter.FavoritesPresenter
 import com.cats.catsapplication.features.favorites.presentation.view.FavoritesView
-import com.cats.catsapplication.router.Screens
 import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
 
@@ -44,7 +42,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     private lateinit var emptyTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.getComponents().get<FavoritesComponent>(Screens.FAVORITES_SCREEN).inject(this)
+        FavoritesComponentProvider.get().inject(this)
         super.onCreate(savedInstanceState)
     }
 

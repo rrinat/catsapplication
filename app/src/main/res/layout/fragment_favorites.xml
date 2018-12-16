@@ -26,6 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="@dimen/margin_medium"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/favorites_message_empty"/>
 
     <ProgressBar
