@@ -10,6 +10,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.cats.catsapplication.DI.cats.CatsComponentProvider
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.mvp.BaseFragment
+import com.cats.catsapplication.core.utils.decoration.GridSpacingItemDecoration
+import com.cats.catsapplication.core.utils.getDisplaySize
 import com.cats.catsapplication.features.cats.presentation.adapter.CatsAdapter
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 import com.cats.catsapplication.features.cats.presentation.presentor.CatsPresenter
@@ -39,6 +41,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     private var catsAdapter = CatsAdapter(emptyList(), this::onFavoriteClick, this::onDownloadClick)
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CatsComponentProvider.get().inject(this)
@@ -49,10 +52,10 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_cats, container, false)
 
-        with(view.findViewById<RecyclerView>(R.id.recycler_view)) {
-            layoutManager = GridLayoutManager(context, SPAN_COUNT)
-            adapter = catsAdapter
-        }
+        recyclerView = view.findViewById(R.id.recycler_view)
+
+        recyclerView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+        recyclerView.adapter = catsAdapter
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener(this)
@@ -63,6 +66,9 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = getString(R.string.cats_title)
+
+        val spacing = (activity!!.getDisplaySize().x - SPAN_COUNT * resources.getDimensionPixelSize(R.dimen.image_size)) / 3
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, spacing, true))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
