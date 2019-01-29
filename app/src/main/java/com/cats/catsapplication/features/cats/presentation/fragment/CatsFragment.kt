@@ -36,7 +36,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
     @ProvidePresenter
     fun providePresenter() = presenter
 
-    private var catsAdapter = CatsAdapter(emptyList(), this::onFavoriteClick, this::onDownloadClick)
+    private var catsAdapter = CatsAdapter(this::onFavoriteClick, this::onDownloadClick)
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -62,7 +62,7 @@ class CatsFragment : BaseFragment(), CatsView, SwipeRefreshLayout.OnRefreshListe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.cats_title)
+        activity!!.title = getString(R.string.cats_title)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

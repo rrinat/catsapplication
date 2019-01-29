@@ -13,15 +13,17 @@ import com.cats.catsapplication.R
 import com.cats.catsapplication.core.domain.Cat
 import com.cats.catsapplication.core.utils.loadImage
 
-class FavoritesAdapter(private var cats: List<Cat>,
-                       private val onDeleteClick: (Cat) -> Unit,
+class FavoritesAdapter(private val onDeleteClick: (Cat) -> Unit,
                        private val onDownloadClick: (Cat) -> Unit) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
+
+    private val cats: MutableList<Cat> = arrayListOf()
 
     fun updateItems(newCats: List<Cat>) {
         val diffUtilsCallback = FavoritesDiffUtilsCallback(cats, newCats)
         val diffResult = DiffUtil.calculateDiff(diffUtilsCallback)
 
-        cats = newCats
+        cats.clear()
+        cats.addAll(newCats)
 
         diffResult.dispatchUpdatesTo(this)
     }

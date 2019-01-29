@@ -38,7 +38,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     @ProvidePresenter
     fun providePresenter() = presenter
 
-    private var favoritesAdapter = FavoritesAdapter(emptyList(), this::onDeleteClick, this::onDownloadClick)
+    private var favoritesAdapter = FavoritesAdapter(this::onDeleteClick, this::onDownloadClick)
     private lateinit var emptyTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +61,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.favorites_title)
+        activity!!.title = getString(R.string.favorites_title)
     }
 
     override fun getProgressView(): View? {

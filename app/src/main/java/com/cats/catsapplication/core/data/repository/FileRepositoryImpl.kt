@@ -16,16 +16,14 @@ class FileRepositoryImpl (private val apiService: ApiService,
     override fun getFile(url: String): Single<File> {
         return Single.defer {
             val directory = fileProvider.getDownloadsFolder()
-            return@defer if (directory != null) {
+            return@defer directory?.let {
                 apiService.getFile(url)
                     .map {
                         val file = File(directory, getFileNameFromUrl(url))
                         fileProvider.writeResponseBodyToFile(it, file)
                         return@map file
                     }
-            } else {
-                Single.error(IOException(resourceProvider.getString(R.string.file_storage_error)))
-            }
+            } ?: Single.error(IOException(resourceProvider.getString(R.string.file_storage_error)))
         }
     }
 

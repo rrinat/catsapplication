@@ -14,15 +14,17 @@ import com.cats.catsapplication.core.utils.loadImage
 import com.cats.catsapplication.features.cats.presentation.model.CatModel
 
 
-class CatsAdapter(private var cats: List<CatModel>,
-                  private val onFavoriteClick: (CatModel) -> Unit,
+class CatsAdapter(private val onFavoriteClick: (CatModel) -> Unit,
                   private val onDownloadClick: (CatModel) -> Unit) : RecyclerView.Adapter<CatsAdapter.ViewHolder>() {
+
+    private val cats: MutableList<CatModel> = arrayListOf()
 
     fun updateItems(newCats: List<CatModel>) {
         val diffUtilsCallback = CatsDiffUtilsCallback(cats, newCats)
         val diffResult = DiffUtil.calculateDiff(diffUtilsCallback)
 
-        cats = newCats
+        cats.clear()
+        cats.addAll(newCats)
 
         diffResult.dispatchUpdatesTo(this)
     }
