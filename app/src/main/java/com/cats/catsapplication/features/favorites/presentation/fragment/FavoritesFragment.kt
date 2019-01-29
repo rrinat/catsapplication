@@ -13,8 +13,11 @@ import com.cats.catsapplication.DI.favorites.FavoritesComponentProvider
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.domain.Cat
 import com.cats.catsapplication.core.mvp.BaseFragment
+import com.cats.catsapplication.core.utils.decoration.GridSpacingItemDecoration
+import com.cats.catsapplication.core.utils.getDisplaySize
 import com.cats.catsapplication.core.utils.gone
 import com.cats.catsapplication.core.utils.show
+import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.features.favorites.presentation.adapter.FavoritesAdapter
 import com.cats.catsapplication.features.favorites.presentation.presenter.FavoritesPresenter
 import com.cats.catsapplication.features.favorites.presentation.view.FavoritesView
@@ -40,6 +43,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
 
     private var favoritesAdapter = FavoritesAdapter(this::onDeleteClick, this::onDownloadClick)
     private lateinit var emptyTextView: TextView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         FavoritesComponentProvider.get().inject(this)
@@ -49,10 +53,10 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_favorites, container, false)
 
-        with(view.findViewById<RecyclerView>(R.id.recycler_view)) {
-            layoutManager = GridLayoutManager(context, SPAN_COUNT)
-            adapter = favoritesAdapter
-        }
+        recyclerView = view.findViewById(R.id.recycler_view)
+
+        recyclerView.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+        recyclerView.adapter = favoritesAdapter
 
         emptyTextView = view.findViewById(R.id.empty_text_view)
 
@@ -62,6 +66,9 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity!!.title = getString(R.string.favorites_title)
+
+        val spacing = (activity!!.getDisplaySize().x - SPAN_COUNT * resources.getDimensionPixelSize(R.dimen.image_size)) / 3
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, spacing, true))
     }
 
     override fun getProgressView(): View? {
