@@ -1,5 +1,7 @@
 package com.cats.catsapplication.features.favorites.presentation.fragment
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -7,39 +9,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.cats.catsapplication.DI.favorites.FavoritesComponentProvider
 import com.cats.catsapplication.R
 import com.cats.catsapplication.core.domain.Cat
-import com.cats.catsapplication.core.mvp.BaseFragment
+import com.cats.catsapplication.core.mvvm.BaseFragment
 import com.cats.catsapplication.core.utils.decoration.GridSpacingItemDecoration
 import com.cats.catsapplication.core.utils.getDisplaySize
 import com.cats.catsapplication.core.utils.gone
 import com.cats.catsapplication.core.utils.show
-import com.cats.catsapplication.features.cats.presentation.fragment.CatsFragment
 import com.cats.catsapplication.features.favorites.presentation.adapter.FavoritesAdapter
-import com.cats.catsapplication.features.favorites.presentation.presenter.FavoritesPresenter
-import com.cats.catsapplication.features.favorites.presentation.view.FavoritesView
+import com.cats.catsapplication.features.favorites.presentation.viewModel.FavoritesViewModel
+import com.cats.catsapplication.features.favorites.presentation.viewModelFactory.FavoritesViewModelFactory
 import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
 
-class FavoritesFragment : BaseFragment(), FavoritesView {
+class FavoritesFragment : BaseFragment() {
 
     companion object {
 
         private const val SPAN_COUNT = 2
 
-        @JvmStatic
         fun newInstance() = FavoritesFragment().apply { arguments = Bundle().apply {} }
     }
 
     @Inject
-    @InjectPresenter
-    lateinit var presenter: FavoritesPresenter
+    lateinit var factory: FavoritesViewModelFactory
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
+    private val viewModel: FavoritesViewModel by lazy {
+        ViewModelProviders.of(this, factory).get(FavoritesViewModel::class.java)
+    }
+
+    override fun provideViewModel() = viewModel
 
     private var favoritesAdapter = FavoritesAdapter(this::onDeleteClick, this::onDownloadClick)
     private lateinit var emptyTextView: TextView
@@ -65,33 +65,35 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity!!.title = getString(R.string.favorites_title)
+        requireActivity().title = getString(R.string.favorites_title)
 
-        val spacing = (activity!!.getDisplaySize().x - SPAN_COUNT * resources.getDimensionPixelSize(R.dimen.image_size)) / 3
+        val spacing = (requireActivity().getDisplaySize().x - SPAN_COUNT * resources.getDimensionPixelSize(R.dimen.image_size)) / 3
         recyclerView.addItemDecoration(GridSpacingItemDecoration(SPAN_COUNT, spacing, true))
+    }
+
+    override fun bindingUI() {
+        viewModel.getCats().observe(this, Observer {cats -> cats?.let { dispatchCats(it) } })
     }
 
     override fun getProgressView(): View? {
         return view?.findViewById(R.id.progress_view)
     }
 
-    override fun showFavorites(cats: List<Cat>) {
+    private fun dispatchCats(cats: List<Cat>) {
         favoritesAdapter.updateItems(cats)
-    }
 
-    override fun showEmptyView() {
-        emptyTextView.show()
-    }
-
-    override fun hideEmptyView() {
-        emptyTextView.gone()
+        if (cats.isEmpty()) {
+            emptyTextView.show()
+        } else {
+            emptyTextView.gone()
+        }
     }
 
     private fun onDeleteClick(cat: Cat) {
-        presenter.onDeleteClick(cat)
+        viewModel.onDeleteClick(cat)
     }
 
     private fun onDownloadClick(cat: Cat) {
-        presenter.onDownloadClick(cat, RxPermissions(activity!!))
+        viewModel.onDownloadClick(cat, RxPermissions(requireActivity()))
     }
 }

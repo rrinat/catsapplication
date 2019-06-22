@@ -1,11 +1,16 @@
 package com.cats.catsapplication.DI.favorites
 
+import android.arch.lifecycle.ViewModelProvider
 import com.cats.catsapplication.core.data.AppDatabase
 import com.cats.catsapplication.core.data.CatDao
+import com.cats.catsapplication.core.domain.interactor.FileInteractor
+import com.cats.catsapplication.core.utils.FileProvider
+import com.cats.catsapplication.core.utils.ResourceProvider
 import com.cats.catsapplication.features.favorites.data.repository.FavoritesRepository
 import com.cats.catsapplication.features.favorites.data.repository.FavoritesRepositoryImpl
 import com.cats.catsapplication.features.favorites.domain.interactor.FavoritesInteractor
 import com.cats.catsapplication.features.favorites.domain.interactor.FavoritesInteractorImpl
+import com.cats.catsapplication.features.favorites.presentation.viewModelFactory.FavoritesViewModelFactory
 import dagger.Module
 import dagger.Provides
 
@@ -20,4 +25,13 @@ class FavoritesModule {
 
     @Provides
     fun provideFavoritesInteractor(favoritesRepository: FavoritesRepository): FavoritesInteractor = FavoritesInteractorImpl(favoritesRepository)
+
+    @Provides
+    fun provideViewModelFactory(
+        favoritesInteractor: FavoritesInteractor,
+        fileInteractor: FileInteractor,
+        fileProvider: FileProvider,
+        resourceProvider: ResourceProvider
+    ): ViewModelProvider.Factory = FavoritesViewModelFactory(favoritesInteractor, fileInteractor, fileProvider, resourceProvider)
+
 }

@@ -1,8 +1,8 @@
 package com.cats.catsapplication.core.utils
 
+import android.arch.lifecycle.MutableLiveData
 import android.os.Handler
 import android.os.Looper
-import com.cats.catsapplication.core.mvp.LoadingView
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -60,23 +60,19 @@ fun Completable.async(): Completable = subscribeOn(Schedulers.io()).observeOn(An
 object RxDecor {
 
     @JvmStatic
-    fun <T> loadingSingle(view: LoadingView): SingleTransformer<T, T> = LoadingViewTransformer(view)
+    fun <T> loadingSingle(view: MutableLiveData<Boolean>): SingleTransformer<T, T> = LoadingTransformer(view)
 
-    private class LoadingViewTransformer<T : R, R>(private val loadingView: LoadingView) : SingleTransformer<T, R> {
+    private class LoadingTransformer<T : R, R>(private val loadingView: MutableLiveData<Boolean>) : SingleTransformer<T, R> {
 
         private val handler = Handler(Looper.getMainLooper())
 
         override fun apply(upstream: Single<T>): SingleSource<R> {
             return upstream
-                .doOnSubscribe { handler.post { loadingView.showProgress() } }
-                .doAfterTerminate { handler.post { loadingView.hideProgress() } }
-                .doOnDispose { handler.post { loadingView.hideProgress() } }
+                .doOnSubscribe { handler.post { loadingView.value = true } }
+                .doAfterTerminate { handler.post { loadingView.value = false } }
+                .doOnDispose { handler.post { loadingView.value = false } }
                 .map { it }
         }
     }
-}
 
-fun loadingView(show: (() -> (Unit)), hide: (() -> (Unit))): LoadingView = object : LoadingView {
-    override fun hideProgress() = hide()
-    override fun showProgress() = show()
 }
