@@ -8,8 +8,8 @@ abstract class Presenter<T : Presentable> : MvpPresenter<T>() {
 
     private val provider = LifecycleProvider()
 
-    override fun destroyView(view: T) {
-        super.destroyView(view)
+    override fun onDestroy() {
+        super.onDestroy()
         provider.unsubscribe()
     }
 

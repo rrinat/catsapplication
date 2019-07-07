@@ -36,9 +36,8 @@ class CatsPresenter @Inject constructor(
     private val catsLoading = loadingView({ viewState.showSwipeProgress() }, { viewState.hideSwipeProgress() })
     private var cats: List<CatModel> = emptyList()
 
-    override fun attachView(view: CatsView?) {
-        super.attachView(view)
-
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
         loadCats()
     }
 
@@ -66,6 +65,7 @@ class CatsPresenter @Inject constructor(
     private fun loadCats() {
         Single.zip<Cats, Cats, List<CatModel>>(catsInteractor.getCats(CATS_COUNT), favoritesInteractor.loadAllFavorites(), BiFunction { t1, t2 -> combineCats(t1, t2) })
             .async()
+            .compose(lifecycle())
             .compose(RxDecor.loadingSingle(catsLoading))
             .subscribe(this::onCatsReceived, { viewState.showError(resourceProvider.getString(R.string.cats_error_download_images)) })
     }

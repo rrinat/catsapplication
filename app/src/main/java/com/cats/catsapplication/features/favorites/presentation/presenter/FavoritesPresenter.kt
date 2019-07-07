@@ -58,6 +58,7 @@ class FavoritesPresenter @Inject constructor(
     private fun loadFavorites() {
         favoritesInteractor.loadAllFavorites()
             .async()
+            .compose(lifecycle())
             .subscribe(this::onFavoritesReceived, {})
     }
 
